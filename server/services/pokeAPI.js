@@ -18,17 +18,8 @@ async function pokeAPI(namesArray){
         dexArray.push(pokeData.data.id.toString())
       
     }
-    console.log(dexArray)
-    return(editDexArray(dexArray))
+    return(dexArray)
 }
 
-
-
-function editDexArray(dexArray){
-   editedDexArray = dexArray.join(',')
-   return editedDexArray
-}
-
-//editDexArray(['registeel','stunfisk','medicham','swampert','scrafty','bastiodon','trevenant','pelipper','noctowl','altaria'])
 
 module.exports = {pokeAPI};
