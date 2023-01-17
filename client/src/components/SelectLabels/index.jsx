@@ -7,30 +7,29 @@ import Select from '@mui/material/Select';
 import { Grid } from '@mui/material';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 import axios from "axios"
+import { Container } from '@mui/system';
 export default function SelectLabels(props) {
   const [league, setLeague] = React.useState('');
   const [pokeNumber, setpokeNumber] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false)
   const [dexNumbers, setDexNumbers] = React.useState('')
+  const [pokeDataArray, setPokeDataArray] = React.useState('')
   const handleChange = (event) => {
     setLeague(event.target.value);
   };
   const handleChange2 = (event) => {
     setpokeNumber(event.target.value)
   };
-
-  console.log(league,pokeNumber)
-
   const handleSubmit = async (e) =>{
     e.preventDefault()
-    console.log(league,pokeNumber)
-    // props.onSubmit([league,pokeNumber])
     setIsLoading(true)
     const {data} = await axios.get(`http://localhost:3001/home/${league}/${pokeNumber}`)
     setIsLoading(false)
-    setDexNumbers(data)
-  
+    setDexNumbers(data[0])
+    setPokeDataArray(data[1])
+    props.changeData(data[1])
   }
 
   return (
@@ -82,21 +81,30 @@ export default function SelectLabels(props) {
       </Grid>
       <Grid item xs={4}>
       <Stack direction="row" marginTop={3} >
-      {isLoading || (!league || !pokeNumber) ? <Button 
+      {isLoading || (!league || !pokeNumber) 
+      ? <Button 
         variant="contained"
         disabled
         type="submit"
-        >Pesquisar</Button> : <Button 
+        >Pesquisar</Button> 
+      : <Button 
         variant="contained"
         type="submit"
         >Pesquisar</Button>}
     
     </Stack>
       </Grid>
-        <p>{dexNumbers}</p>
-
-
       </Grid>
+      
+      <Grid container marginTop={2}>
+        <Container maxWidth="sm">
+      <TextField  id="outlined-basic" label="Pokemon Filter" variant="outlined" InputProps={{
+            readOnly: true,
+          }} value= {dexNumbers} sx={{width:400}} />
+          </Container>
+      </Grid>
+
+      
     </form>
   );
 }
